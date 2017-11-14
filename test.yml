@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+  roles:
+    - ansible-oracle-jdk
+
+- hosts: zookeeper
+  become: yes
+  gather_facts: no
+  serial: 1
+  vars:
+    exhibitor_config_type: file
+    exhibitor_fs_config_dir: /vagrant/zk-exhibitor
+  roles:
+    - ansible-zookeeper

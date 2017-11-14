@@ -1,0 +1,3 @@
+- name: restart exhibitor
+  service: name=exhibitor state=restarted enabled=yes
+  when: exhibitor.restart_on_change|default(False)

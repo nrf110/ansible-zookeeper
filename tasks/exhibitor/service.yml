@@ -1,0 +1,4 @@
+---
+- name: Start Exhibitor
+  service: name=exhibitor state=started enabled=yes
+  register: exhibitor_started

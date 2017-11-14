@@ -1,0 +1,15 @@
+- name: Exhibitor Properties
+  template:
+    src: exhibitor.properties.j2
+    dest: "{{ exhibitor_install_dir }}/exhibitor.default.properties"
+    owner: "{{ zk_user }}"
+    group: "{{ zk_group }}"
+    mode: 0644
+
+- name: Exhibitor Service Script
+  template:
+    src: exhibitor.service.j2
+    dest: /etc/systemd/system/exhibitor.service
+    owner: root
+    group: root
+    mode: 0755

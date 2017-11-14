@@ -1,0 +1,60 @@
+[Unit]
+Description=ZooKeeper Exhibitor
+After=network.target
+
+[Service]
+ExecStartPre=- /sbin/swapoff -a
+ExecStart=/usr/bin/java -jar '{{exhibitor_install_dir}}/{{ exhibitor_artifact }}' \
+{% if exhibitor_config_type == 's3' %}
+{% if exhibitor_s3_credentials_file is defined %}
+  --s3credentials '{{ exhibitor_s3_credentials_file }}' \
+{% endif %}
+{% if exhibitor_s3_region %}
+  --s3region {{ exhibitor_s3_region }} \
+{% endif %}
+  --s3config '{{ exhibitor_s3_bucket }}/{{ exhibitor_s3_key }}' \
+{% if exhibitor_s3_config_prefix %}
+  --s3configprefix {{ exhibitor_s3_config_prefix }} \
+{% endif %}
+{% elif exhibitor_config_type == 'consul' %}
+{% if exhibitor_consul_acl_token is defined %}
+  --consulacltoken {{ exhibitor_consul_acl_token }} \
+{% endif %}
+{% if exhibitor_consul_ssl is defined %}
+  --consulssl {{ exhibitor_consul_ssl }} \
+{% endif %}
+{% if exhibitor_consul_ssl_ca_cert is defined %}
+  --consulsslcacert '{{ exhibitor_consul_ssl_ca_cert }}' \
+{% endif %}
+{% if exhibitor_consul_ssl_protocol is defined %}
+  --consulsslprotocol {{ exhibitor_consul_ssl_protocol }} \
+{% endif %}
+{% if exhibitor_consul_ssl_verify_hostname is defined %}
+  --consulsslverifyhostname {{ exhibitor_consul_ssl_verify_hostname }} \
+{% endif %}
+  --consulhost {{ exhibitor_consul_host|default('localhost') }} \
+  --consulport {{ exhibitor_consul_port|default(8500) }} \
+  --consulprefix {{ exhibitor_consul_prefix|default('exhibitor/') }} \
+{% elif exhibitor_config_type == 'file' %}
+  --fsconfigdir {{ exhibitor_fs_config_dir }} \
+  --fsconfiglockprefix {{ exhibitor_fs_config_lock_prefix|default('exhibitor-lock-') }} \
+  --fsconfigname {{ exhibitor_fs_config_name|default('exhibitor.properties') }} \
+{% else %}
+{% endif %}
+  --configtype {{ exhibitor_config_type }} \
+  --defaultconfig '{{ exhibitor_install_dir }}/exhibitor.default.properties' \
+  --hostname {{ exhibitor_hostname|default(inventory_hostname) }} \
+  --port {{ exhibitor_port }}
+StandardOutput=journal
+StandardError=journal
+WorkingDirectory={{ exhibitor_install_dir }}
+Restart=always
+RestartSec=60
+TimeoutStopSec=120
+TimeoutStartSec=120
+LimitNOFILE=infinity
+User={{ zk_user }}
+Group={{ zk_group }}
+
+[Install]
+WantedBy=multi-user.target

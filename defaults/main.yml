@@ -1,0 +1,20 @@
+zk_user: zookeeper
+zk_group: zookeeper
+zk_version: 3.4.6
+zk_version_name: "zookeeper-{{ zk_version }}"
+zk_artifact: "{{ zk_version_name }}.tar.gz"
+zk_download_url: "http://www.mirrorservice.org/sites/ftp.apache.org/zookeeper/{{ zk_version_name }}/{{ zk_artifact }}"
+zk_staging_dir: ./tarballs
+zk_install_dir: /usr/share
+zk_real_home: "{{ zk_install_dir }}/{{ zk_version_name }}"
+zk_home: "{{ zk_install_dir }}/zookeeper"
+zk_config_dir: /etc/zookeeper/conf
+zk_log_dir: /var/log/zookeeper
+zk_data_dir: /var/lib/zookeeper
+zk_temp_dir: /tmp
+
+exhibitor_version: 1.6.0
+exhibitor_install_dir: /usr/share/exhibitor
+exhibitor_artifact: "exhibitor-standalone-{{ exhibitor_version }}.jar"
+exhibitor_download_url: "http://search.maven.org/remotecontent?filepath=io/soabase/exhibitor/exhibitor-standalone/{{ exhibitor_version }}/{{ exhibitor_artifact }}"
+exhibitor_port: 8080

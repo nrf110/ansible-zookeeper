@@ -1,0 +1,14 @@
+---
+- include: zk/install.yml
+  tags: [install]
+
+- include: exhibitor/install.yml
+  tags: [install]
+
+- include: exhibitor/config.yml
+  tags: [config]
+
+- include: exhibitor/service.yml
+  tags: [service]
+
+- meta: flush_handlers
